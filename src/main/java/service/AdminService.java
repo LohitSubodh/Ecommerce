@@ -1,6 +1,7 @@
 package service;
 
 import entity.Coupon;
+import entity.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.CouponRepository;
@@ -10,11 +11,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static service.CouponService.COUPON_PERCENTAGE;
+
 @Service
 public class AdminService {
     @Autowired
     private OrderRepository orderRepository;
-
+    @Autowired
+    private  CouponService couponService;
     @Autowired
     private CouponRepository couponRepository;
 
@@ -38,9 +42,23 @@ public class AdminService {
         // get the total discount amount
         double totalDiscount = orderRepository.findAll()
                 .stream()
-                .mapToDouble(order -> order.getDiscount())
+                .mapToDouble(Order::getDiscount)
                 .sum();
         report.put("totalDiscount", totalDiscount);
         return report;
+    }
+    public void generateCoupon() {
+        // create a new coupon object
+        Coupon coupon = new Coupon();
+        // generate a random coupon code
+        String code = couponService.generateCouponCode();
+        // set the coupon code
+        coupon.setCode(code);
+        // set the coupon percentage
+        coupon.setPercentage(COUPON_PERCENTAGE);
+        // set the coupon as valid
+        coupon.setValid(true);
+        // save the coupon to the database
+        couponRepository.save(coupon);
     }
 }

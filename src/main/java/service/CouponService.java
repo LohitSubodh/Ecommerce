@@ -19,7 +19,7 @@ public class CouponService {
 
     private static final int NTH_ORDER = 5;
 
-    private static final double COUPON_PERCENTAGE = 10.0;
+    public static final double COUPON_PERCENTAGE = 10.0;
 
     private static final int COUPON_LENGTH = 8;
 
@@ -55,7 +55,7 @@ public class CouponService {
         }
     }
 
-    private String generateCouponCode() {
+    String generateCouponCode() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < COUPON_LENGTH; i++) {
             int index = random.nextInt(COUPON_CHARS.length());
